@@ -1,66 +1,73 @@
 @startuml
 actor Customer
-participant Web Browser as WB
-participant Product Catalog Service as PCS
-participant Shopping Cart Service as SCS
-participant Order Service as OS
-participant Payment Gateway as PG
-participant Email Service as ES
+participant "Web Browser" as WB
+participant "Product Catalog Service" as PCS
+participant "Shopping Cart Service" as SCS
+participant "Order Service" as OS
+participant "Payment Gateway" as PG
+participant "Email Service" as ES
 
-Customer - WB Open Website
-WB - PCS Get Product List
-PCS - WB Return Product List
+Customer -> WB: Open Website
+WB -> PCS: Get Product List
+activate PCS
+PCS -> WB: Return Product List
+deactivate PCS
 
-Customer - WB View Product Details
-WB - PCS Get Product Details
-PCS - WB Return Product Details
+Customer -> WB: View Product Details
+WB -> PCS++: Get Product Details
+PCS -> WB: Return Product Details
+PCS--
 
-Customer - WB Add to Cart
-WB - SCS Add Item to Cart
-SCS - WB Confirm Item Added
+== Some devision line ==
+Customer -> WB: Add to Cart
+WB -> SCS: Add Item to Cart
+SCS -> WB: Confirm Item Added
 
-Customer - WB View Cart
-WB - SCS Get Cart Contents
-SCS - WB Return Cart Contents
+note right
+  Hint **some note can be here**
+end note
+
+Customer -[#blue]> WB: View Cart
+WB -> SCS: <color #green>Get Cart Contents</color>
+SCS -> WB: Return Cart Contents
 
 opt Apply Discount Code
-    Customer - WB Enter Discount Code
-    WB - SCS Validate Discount Code
-    SCS - WB Discount Applied
+    Customer -> WB: Enter Discount Code
+    WB -> SCS: Validate Discount Code
+    SCS -> WB: Discount Applied
 end
 
-Customer - WB Checkout
-WB - SCS Create Order
-SCS - OS Create Order
+Customer -> WB: Checkout
+WB -> SCS: Create Order
+SCS -> OS: Create Order
 
 par Order Processing and Browsing Categories
-    OS - PG Process Payment
-    PG - OS Payment Success
-    OS - SCS Confirm Order
-    OS - ES Send Confirmation Email
-    ES - Customer Order Confirmation Email
+    OS -> PG: Process Payment
+    PG -> OS: Payment Success
+    OS -> SCS: Confirm Order
+    OS -> ES: Send Confirmation Email
+    ES -> Customer: Order Confirmation Email
 
     group Browsing Categories
-        Customer - WB Browse Categories
+        Customer -> WB: Browse Categories
         loop [for each category]
-            WB - PCS Get Category Products
-            PCS - WB Return Category Products
+            WB -> PCS: Get Category Products
+            PCS -> WB: Return Category Products
         end
     end
 end
 
 alt Order Valid
-    OS - SCS Confirm Order
+    OS -> SCS: Confirm Order
 else Payment Failure
-    OS - WB Payment Failure Notification
+    OS -> WB: Payment Failure Notification
 end
 
 loop Check Order Status
-    Customer - WB Check Order Status
-    WB - OS Get Order Status
-    OS - WB Return Order Status
+    Customer -> WB: Check Order Status
+    WB -> OS: Get Order Status
+    OS -> WB: Return Order Status
 end
 
-WB - Customer Display Order Status
-
+WB -> Customer: Display Order Status
 @enduml
