@@ -1,4 +1,4 @@
-# UML-sequence-diagram
+# <img src="https://github.com/sssshefer/UML-sequence-diagram/assets/63253440/2fb31460-b94b-4740-a601-536a50ec243f" height="32"> UML-sequence-diagram
 UML Sequence Diagram with **most common** Syntax Constructions 
 
 ## Table of content
